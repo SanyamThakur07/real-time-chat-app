@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "build": "cd frontend && bun install && bun run build",
+    "start": "cd backend && bun run start",
+    "dev": "bun run build && bun run start"
+  },
+  "dependencies": {
+    "node": "^25.5.0"
+  }
+}
