@@ -1,11 +1,10 @@
 import express from "express";
 import path from "path";
-import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes.js";
 import { connectDB } from "./lib/db.js";
+import { ENV } from "./lib/env.js";
 
 const app = express();
-dotenv.config();
 app.use(express.json());
 
 app.use("/api/auth/", authRoutes);
@@ -19,7 +18,7 @@ app.get("*path", (_, res) => {
   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(ENV.PORT, () => {
   console.log("Server running on: " + process.env.PORT);
   connectDB();
 });
