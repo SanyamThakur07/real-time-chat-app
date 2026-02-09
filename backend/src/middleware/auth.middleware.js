@@ -5,13 +5,13 @@ import User from "../models/User.js";
 export const protectRoute = (res, req, next) => {
   try {
     const token = req.cookie.jwt;
-    if (!token) res.status(401).json({ message: "Unauthorized" });
+    if (!token) return res.status(401).json({ message: "Unauthorized" });
 
     const decoded = jwt.verify("jwt", ENV.JWT_SECRET);
-    if (!decoded) res.status(401).json({ message: "Unauthorized" });
+    if (!decoded) return res.status(401).json({ message: "Unauthorized" });
 
     const user = User.findById(decoded.userId).select("-password");
-    if (!user) res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     req.user = user;
     next();

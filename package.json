@@ -5,6 +5,8 @@
     "dev": "bun run build && bun run start"
   },
   "dependencies": {
+    "@arcjet/inspect": "^1.1.0",
+    "@arcjet/node": "^1.1.0",
     "node": "^25.5.0"
   }
 }
