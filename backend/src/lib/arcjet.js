@@ -1,4 +1,4 @@
-import arcjet, { shield, detectBot, tokenBucket } from "@arcjet/node";
+import arcjet, { shield, detectBot, slidingWindow } from "@arcjet/node";
 import { ENV } from "./env.js";
 
 const aj = arcjet({
@@ -21,13 +21,11 @@ const aj = arcjet({
       ],
     }),
     // Create a token bucket rate limit. Other algorithms are supported.
-    tokenBucket({
-      mode: "LIVE",
-      // Tracked by IP address by default, but this can be customized
-      // See https://docs.arcjet.com/fingerprints
-      //characteristics: ["ip.src"],
+
+    slidingWindow({
+      mode: "LIVE", // Blocks requests. Use "DRY_RUN" to log only
       max: 100,
-      interval: 60, // Refill every 10 seconds
+      interval: 60,
     }),
   ],
 });
