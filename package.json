@@ -5,7 +5,6 @@
     "dev": "bun run build && bun run start"
   },
   "dependencies": {
-    "node": "^25.5.0",
-    "react-router": "^7.13.0"
+    "node": "^25.5.0"
   }
 }
