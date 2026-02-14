@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
@@ -9,7 +10,7 @@ import { ENV } from "./lib/env.js";
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use("/api/auth/", authRoutes);
 app.use("/api/messages/", messageRoutes);
 

@@ -1,16 +1,30 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ChatPage } from "./pages/ChatPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { LoginPage } from "./pages/LoginPage";
+import { GridBackgroundDemo } from "./components/ui/background";
+import { useAuthStore } from "./store/useAuthStore";
 
 function App() {
+  const { authUser } = useAuthStore();
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/" element={<ChatPage />} />
-    </Routes>
+    <GridBackgroundDemo>
+      <Routes>
+        <Route
+          path="/"
+          element={authUser ? <ChatPage /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/signup"
+          element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/login"
+          element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}
+        />
+      </Routes>
+    </GridBackgroundDemo>
   );
 }
 
