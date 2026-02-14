@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ChatPage } from "./pages/ChatPage";
 import { SignUpPage } from "./pages/SignUpPage";
@@ -7,7 +7,20 @@ import { GridBackgroundDemo } from "./components/ui/background";
 import { useAuthStore } from "./store/useAuthStore";
 
 function App() {
-  const { authUser } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  if (isCheckingAuth) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+      </div>
+    );
+  }
+
   return (
     <GridBackgroundDemo>
       <Routes>
