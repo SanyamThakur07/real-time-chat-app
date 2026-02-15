@@ -21,83 +21,94 @@ export const LoginPage = () => {
   });
   const { login, isLoggingIn } = useAuthStore();
 
-  const handleSignUp = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     login(formData);
   };
+
   return (
-    <Card className="w-full min-w-[400px]">
-      <CardHeader>
-        <CardTitle className="text-3xl font-bold">Welcome back</CardTitle>
-        <CardDescription className="font-medium">
-          Log in to your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSignUp}>
-          <FieldGroup className="gap-3">
-            <Field className="gap-1">
-              <FieldLabel className="flex" htmlFor="fieldgroup-email">
-                Email
-              </FieldLabel>
-              <div className="relative">
-                <Mail className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input
-                  id="fieldgroup-email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  type="email"
-                  placeholder="jordan@example.com"
-                  className="pl-10"
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+      <Card className="w-full max-w-[400px] border-slate-200 shadow-sm">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-semibold text-slate-900">
+            Welcome back
+          </CardTitle>
+          <CardDescription className="text-sm text-slate-500">
+            Enter your credentials to access your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin}>
+            <FieldGroup className="gap-4">
+              <Field className="gap-1.5">
+                <FieldLabel htmlFor="fieldgroup-email" className="text-sm font-medium text-slate-700">
+                  Email
+                </FieldLabel>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Input
+                    id="fieldgroup-email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    type="email"
+                    placeholder="Enter your email"
+                    className="h-10 border-slate-200 pl-10 text-sm placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400"
+                    disabled={isLoggingIn}
+                  />
+                </div>
+              </Field>
+              <Field className="gap-1.5">
+                <FieldLabel htmlFor="fieldgroup-password" className="text-sm font-medium text-slate-700">
+                  Password
+                </FieldLabel>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Input
+                    id="fieldgroup-password"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                    type="password"
+                    placeholder="Enter your password"
+                    className="h-10 border-slate-200 pl-10 text-sm placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400"
+                    disabled={isLoggingIn}
+                  />
+                </div>
+              </Field>
+              <Field orientation="horizontal" className="pt-2">
+                <Button 
+                  className="h-10 w-full bg-slate-900 text-sm font-medium hover:bg-slate-800" 
+                  type="submit" 
                   disabled={isLoggingIn}
-                />
-              </div>
-            </Field>
-            <Field className="gap-1">
-              <FieldLabel htmlFor="fieldgroup-password">Password</FieldLabel>
-              <div className="relative">
-                <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input
-                  id="fieldgroup-password"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                  type="password"
-                  placeholder="**********"
-                  className="pl-10"
-                  disabled={isLoggingIn}
-                />
-              </div>
-            </Field>
-            <Field orientation="horizontal">
-              <Button className="w-full" type="submit" disabled={isLoggingIn}>
-                {isLoggingIn ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Logging in...
-                  </>
-                ) : (
-                  "Log in"
-                )}
-              </Button>
-            </Field>
-          </FieldGroup>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-start pt-0">
-        <p className="text-sm font-medium text-gray-600">
-          Don't have an account?{" "}
-          <Link
-            to="/signup"
-            className="font-medium text-blue-600 hover:underline"
-          >
-            Sign Up
-          </Link>
-        </p>
-      </CardFooter>
-    </Card>
+                >
+                  {isLoggingIn ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Signing in...
+                    </>
+                  ) : (
+                    "Sign in"
+                  )}
+                </Button>
+              </Field>
+            </FieldGroup>
+          </form>
+        </CardContent>
+        <CardFooter className="flex justify-center border-t border-slate-100 pt-4">
+          <p className="text-sm text-slate-500">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="font-medium text-slate-900 hover:underline"
+            >
+              Create account
+            </Link>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
