@@ -1,15 +1,12 @@
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore.js";
 import UserSkeleton from "./UserSkeleton.jsx";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserRound } from "lucide-react";
 
 const ContactList = () => {
-  const { allContacts, isUsersLoading, getAllContacts } = useChatStore();
+  const { allContacts, isUsersLoading, getAllContacts, setSelectedUser } =
+    useChatStore();
 
   useEffect(() => {
     getAllContacts();
@@ -28,12 +25,15 @@ const ContactList = () => {
   return (
     <div className="flex flex-col">
       {allContacts.length === 0 ? (
-        <p className="p-8 text-center text-sm text-slate-400">No contacts found</p>
+        <p className="p-8 text-center text-sm text-slate-400">
+          No contacts found
+        </p>
       ) : (
         allContacts.map((contact) => (
           <div
             key={contact._id}
             className="flex cursor-pointer items-center gap-3 border-b border-slate-100 p-4 transition-colors hover:bg-slate-50"
+            onClick={() => setSelectedUser(contact)}
           >
             <Avatar className="h-10 w-10">
               <AvatarImage
@@ -46,7 +46,9 @@ const ContactList = () => {
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <h4 className="truncate text-sm font-medium text-slate-900">{contact.fullName}</h4>
+              <h4 className="truncate text-sm font-medium text-slate-900">
+                {contact.fullName}
+              </h4>
               <p className="truncate text-xs text-slate-500">{contact.email}</p>
             </div>
           </div>

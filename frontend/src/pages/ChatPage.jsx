@@ -4,10 +4,12 @@ import { ActiveTabsSwitch } from "../components/ActiveTabSwitch.jsx";
 import ChatList from "../components/ChatList.jsx";
 import ContactList from "../components/ContactList.jsx";
 import { useChatStore } from "../store/useChatStore.js";
+import { NoConversationPlaceholder } from "../components/NoConversationPlaceholder.jsx";
+import ChatContainer from "../components/ChatContainer.jsx";
 
 export const ChatPage = () => {
-  const { activeTab } = useChatStore();
-  
+  const { activeTab, selectedUser } = useChatStore();
+
   return (
     <div className="flex h-screen w-full bg-slate-50">
       {/* Sidebar */}
@@ -18,10 +20,10 @@ export const ChatPage = () => {
           {activeTab === "chats" ? <ChatList /> : <ContactList />}
         </div>
       </div>
-      
+
       {/* Main Chat Area */}
-      <div className="flex flex-1 items-center justify-center bg-slate-50">
-        <p className="text-slate-400">Select a chat to start messaging</p>
+      <div className="flex-1 bg-slate-50">
+        {selectedUser ? <ChatContainer /> : <NoConversationPlaceholder />}
       </div>
     </div>
   );

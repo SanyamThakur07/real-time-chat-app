@@ -1,15 +1,12 @@
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore.js";
 import UserSkeleton from "./UserSkeleton.jsx";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserRound } from "lucide-react";
 
 const ChatList = () => {
-  const { chats, isUsersLoading, getMyChatPartners } = useChatStore();
+  const { chats, isUsersLoading, getMyChatPartners, setSelectedUser } =
+    useChatStore();
 
   useEffect(() => {
     getMyChatPartners();
@@ -34,6 +31,7 @@ const ChatList = () => {
           <div
             key={chat._id}
             className="flex cursor-pointer items-center gap-3 border-b border-slate-100 p-4 transition-colors hover:bg-slate-50"
+            onClick={() => setSelectedUser(chat)}
           >
             <Avatar className="h-10 w-10">
               <AvatarImage
@@ -46,7 +44,9 @@ const ChatList = () => {
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <h4 className="truncate text-sm font-medium text-slate-900">{chat.fullName}</h4>
+              <h4 className="truncate text-sm font-medium text-slate-900">
+                {chat.fullName}
+              </h4>
               <p className="truncate text-xs text-slate-500">
                 {chat.lastMessage || "No messages yet"}
               </p>
