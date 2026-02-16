@@ -10,7 +10,7 @@ import { arcjetProtection } from "../middleware/arcjet.middleware.js";
 
 const router = expres.Router();
 
-// router.use(arcjetProtection);
+router.use(arcjetProtection);
 
 router.post("/signup", signup);
 
