@@ -5,7 +5,7 @@ import { useAuthStore } from "../store/useAuthStore.js";
 
 import { UserRound, X } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useChatStore();
@@ -25,6 +25,9 @@ export const ChatHeader = () => {
           <AvatarFallback>
             <UserRound className="h-5 w-5" />
           </AvatarFallback>
+          {isOnline && (
+            <AvatarBadge className="bg-green-500 ring-2 ring-white" />
+          )}
         </Avatar>
 
         <div>

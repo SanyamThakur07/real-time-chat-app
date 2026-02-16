@@ -12,7 +12,9 @@ const io = new Server(server, {
   cors: {
     origin: ENV.CLIENT_URL,
     credentials: true,
+    methods: ["GET", "POST"],
   },
+  allowEIO3: true,
 });
 
 io.use(socketAuthMiddleware);

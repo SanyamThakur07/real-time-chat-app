@@ -16,6 +16,7 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await axiosInstance.get("/auth/check");
       set({ authUser: res.data });
+      get().connectSocket();
     } catch (error) {
       console.error("Error in authUser: ", error);
       set({ authUser: null });
@@ -78,23 +79,38 @@ export const useAuthStore = create((set, get) => ({
   },
 
   connectSocket: () => {
-    const { authUser } = get();
-    if (!authUser || get().socket.connected) return;
+    const { authUser, socket } = get();
+    if (!authUser || socket?.connected) return;
 
-    const socket = io(BASE_URL, {
+    const newSocket = io(BASE_URL, {
       withCredentials: true,
+      transports: ["websocket", "polling"],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
     });
 
-    socket.connect();
+    newSocket.on("connect", () => {
+      console.log("Socket connected:", newSocket.id);
+    });
 
-    set({ socket });
+    newSocket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error.message);
+    });
 
-    socket.on("getOnlineUsers", (userIds) => {
+    newSocket.on("disconnect", (reason) => {
+      console.log("Socket disconnected:", reason);
+    });
+
+    set({ socket: newSocket });
+
+    newSocket.on("getOnlineUsers", (userIds) => {
       set({ onlineUsers: userIds });
     });
   },
 
   disconnectSocket: () => {
-    if (get().socket.connected) get().socket.disconnect();
+    const { socket } = get();
+    if (socket?.connected) socket.disconnect();
   },
 }));
