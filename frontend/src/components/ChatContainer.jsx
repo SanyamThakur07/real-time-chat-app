@@ -1,22 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { ChatHeader } from "./ChatHeader.jsx";
 import { MessageLoadingSkeleton } from "./MessageLoadingSkeleton.jsx";
 import { NoChatHistoryPlaceHolder } from "./NoChatHistoryPlaceHolder.jsx";
 import { useChatStore } from "../store/useChatStore.js";
 import { useAuthStore } from "../store/useAuthStore.js";
+import { MessageInput } from "./MessageInput.jsx";
 
 const ChatContainer = () => {
   const { selectedUser, messages, getMessagesByUserId, isMessagesLoading } =
     useChatStore();
   const { authUser } = useAuthStore();
+  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   useEffect(() => {
     getMessagesByUserId(selectedUser._id);
   }, [selectedUser, getMessagesByUserId]);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isMessagesLoading]);
+
   return (
     <div className="flex h-full flex-col">
       <ChatHeader />
-      <div className="flex flex-1 flex-col px-6 py-8">
+      <div 
+        ref={messagesContainerRef}
+        className="flex flex-1 flex-col overflow-y-auto px-6 py-8"
+      >
         {messages.length > 0 && !isMessagesLoading ? (
           <div className="w-full space-y-4">
             {messages.map((msg) => (
@@ -44,6 +58,8 @@ const ChatContainer = () => {
                 </time>
               </div>
             ))}
+            {/* Invisible element to scroll to */}
+            <div ref={messagesEndRef} />
           </div>
         ) : isMessagesLoading ? (
           <MessageLoadingSkeleton />
@@ -51,6 +67,7 @@ const ChatContainer = () => {
           <NoChatHistoryPlaceHolder />
         )}
       </div>
+      <MessageInput />
     </div>
   );
 };

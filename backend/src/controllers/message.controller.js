@@ -35,11 +35,11 @@ export const getChatPartners = async (req, res) => {
       ),
     ];
 
-    const chatPartner = await Messages.find({
-      id: { $in: chatPartnerIds },
+    const chatPartners = await User.find({
+      _id: { $in: chatPartnerIds },
     }).select("-password");
 
-    res.status(200).json(chatPartner);
+    res.status(200).json(chatPartners);
   } catch (error) {
     console.error("Error in getChatPartner: ", error);
     res.status(500).json({ message: "Internal server error" });
