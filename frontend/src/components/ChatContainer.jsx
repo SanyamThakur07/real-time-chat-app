@@ -27,7 +27,7 @@ const ChatContainer = () => {
   return (
     <div className="flex h-full flex-col">
       <ChatHeader />
-      <div 
+      <div
         ref={messagesContainerRef}
         className="flex flex-1 flex-col overflow-y-auto px-6 py-8"
       >

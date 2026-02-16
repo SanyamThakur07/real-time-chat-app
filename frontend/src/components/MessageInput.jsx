@@ -2,9 +2,11 @@ import { useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { Input } from "@/components/ui/input";
 import { Send, Image, X } from "lucide-react";
+import useKeyboardSound from "./UseKeyboardSound.jsx";
 
 export const MessageInput = () => {
-  const { sendMessage } = useChatStore();
+  const { playRandomKeyStrokeSound } = useKeyboardSound();
+  const { sendMessage, isSoundEnabled } = useChatStore();
   const [text, setText] = useState("");
   const [imagePrev, setImagePrev] = useState("");
 
@@ -13,7 +15,7 @@ export const MessageInput = () => {
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!text && !imagePrev) return;
-
+    if (isSoundEnabled) playRandomKeyStrokeSound();
     sendMessage({
       text: text.trim(),
       image: imagePrev,
@@ -59,7 +61,7 @@ export const MessageInput = () => {
           </div>
         </div>
       )}
-      
+
       {/* Input Form - fixed at bottom */}
       <form onSubmit={handleSendMessage} className="flex items-center gap-3">
         <Input
