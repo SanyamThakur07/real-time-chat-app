@@ -39,7 +39,7 @@ const ChatContainer = () => {
                 className={`chat ${msg.senderId === authUser._id ? "chat-end" : "chat-start"}`}
               >
                 <div
-                  className={`chat-bubble ${msg.senderId === authUser._id ? "bg-green-500 text-white" : "bg-blue-600 text-white"}`}
+                  className={`chat-bubble rounded-t-2xl p-3 ${msg.senderId === authUser._id ? "rounded-bl-2xl bg-green-600 text-white" : "rounded-br-2xl bg-blue-600 text-white"}`}
                 >
                   {msg.image && (
                     <img
@@ -48,7 +48,7 @@ const ChatContainer = () => {
                       className="h-45 rounded-lg"
                     />
                   )}
-                  {msg.text && <p className="mt-2">{msg.text}</p>}
+                  {msg.text && <p>{msg.text}</p>}
                 </div>
                 <time className="chat-footer text-xs text-slate-600">
                   {new Date(msg.createdAt).toLocaleTimeString([], {
