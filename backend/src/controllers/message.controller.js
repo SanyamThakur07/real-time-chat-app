@@ -1,4 +1,5 @@
 import cloudinary from "../lib/cloudinary.js";
+import { getReceiverSocketId, io, userSocketMap } from "../lib/socket.js";
 import Messages from "../models/Messages.js";
 import User from "../models/User.js";
 
@@ -97,6 +98,18 @@ export const sendMessages = async (req, res) => {
     });
 
     await newMessage.save();
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    console.log("Looking for receiver:", receiverId, "Type:", typeof receiverId);
+    console.log("Current socket map:", userSocketMap);
+    console.log("Receiver socket ID:", receiverSocketId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+      console.log("Message emitted to receiver:", receiverId);
+    } else {
+      console.log("Receiver not connected:", receiverId);
+    }
+
     res.status(201).json(newMessage);
   } catch (error) {
     console.error("Error in sendMessage: ", error);

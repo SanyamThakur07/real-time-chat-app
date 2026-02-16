@@ -87,4 +87,30 @@ export const useChatStore = create((set, get) => ({
       toast.error(error.response?.data?.message || "Failed to send message");
     }
   },
+
+  subscribeToMessages: () => {
+    const { selectedUser } = get();
+    const socket = useAuthStore.getState().socket;
+
+    if (!socket) {
+      console.log("No socket available for subscription");
+      return;
+    }
+
+    console.log("Subscribing to messages for user:", selectedUser._id);
+
+    socket.on("newMessage", (newMessage) => {
+      console.log("Received newMessage:", newMessage);
+      const isMessageSentFromSelectedUser =
+        newMessage.senderId === selectedUser._id;
+
+      if (!isMessageSentFromSelectedUser) return;
+      set({ messages: [...get().messages, newMessage] });
+    });
+  },
+
+  unsubscribeToMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    socket.off("newMessage");
+  },
 }));

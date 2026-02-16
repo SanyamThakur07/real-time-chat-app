@@ -3,7 +3,6 @@ import express from "express";
 import http from "http";
 import { ENV } from "./env.js";
 import { socketAuthMiddleware } from "../middleware/socket.auth.middleware.js";
-
 const app = express();
 
 const server = http.createServer(app);
@@ -19,13 +18,19 @@ const io = new Server(server, {
 
 io.use(socketAuthMiddleware);
 
+export function getReceiverSocketId(userId) {
+  return userSocketMap[userId];
+}
+
 const userSocketMap = {};
 
 io.on("connection", (socket) => {
-  console.log("A user connected: ", socket.user.fullName);
+  console.log("A user connected: ", socket.user.fullName, "ID:", socket.userId);
 
   const userId = socket.userId;
   userSocketMap[userId] = socket.id;
+  
+  console.log("Socket map updated:", userSocketMap);
 
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
@@ -36,4 +41,4 @@ io.on("connection", (socket) => {
   });
 });
 
-export { io, app, server };
+export { io, app, server, userSocketMap };

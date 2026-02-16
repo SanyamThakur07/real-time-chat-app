@@ -7,15 +7,26 @@ import { useAuthStore } from "../store/useAuthStore.js";
 import { MessageInput } from "./MessageInput.jsx";
 
 const ChatContainer = () => {
-  const { selectedUser, messages, getMessagesByUserId, isMessagesLoading } =
-    useChatStore();
+  const {
+    selectedUser,
+    subscribeToMessages,
+    unsubscribeToMessages,
+    messages,
+    getMessagesByUserId,
+    isMessagesLoading,
+  } = useChatStore();
   const { authUser } = useAuthStore();
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
   useEffect(() => {
     getMessagesByUserId(selectedUser._id);
-  }, [selectedUser, getMessagesByUserId]);
+    subscribeToMessages();
+
+    return () => {
+      unsubscribeToMessages();
+    };
+  }, [selectedUser, getMessagesByUserId, subscribeToMessages, unsubscribeToMessages]);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -39,7 +50,7 @@ const ChatContainer = () => {
                 className={`chat ${msg.senderId === authUser._id ? "chat-end" : "chat-start"}`}
               >
                 <div
-                  className={`chat-bubble rounded-t-2xl p-3 ${msg.senderId === authUser._id ? "rounded-bl-2xl bg-green-600 text-white" : "rounded-br-2xl bg-blue-600 text-white"}`}
+                  className={`chat-bubble rounded-t-2xl px-4 py-2.5 ${msg.senderId === authUser._id ? "rounded-bl-2xl bg-green-600 text-white" : "rounded-br-2xl bg-blue-600 text-white"}`}
                 >
                   {msg.image && (
                     <img
