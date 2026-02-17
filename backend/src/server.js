@@ -16,11 +16,11 @@ app.use("/api/messages/", messageRoutes);
 
 // Serve frontend
 const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
 // React fallback
 app.get("*path", (_, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
 });
 
 server.listen(ENV.PORT, () => {
